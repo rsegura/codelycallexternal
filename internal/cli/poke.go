@@ -42,7 +42,6 @@ func runPokeFn(service fetching.Service, repository csv.CsvRepo) CobraFn {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(pokemons)
 		repository.SavePokemons(pokemons, csvName)
 	}
 }

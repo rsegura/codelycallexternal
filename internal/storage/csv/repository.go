@@ -3,8 +3,9 @@ package csv
 import(
 	"os"
 	"encoding/csv"
-	"log"
 	"github.com/rsegura/codelycallexternal/internal/fetching"
+	"github.com/rsegura/codelycallexternal/internal/errors"
+
 
 
 )
@@ -24,8 +25,7 @@ func(r *repository) SavePokemons(data fetching.PokemonRequest, csvName string)(e
 	file, err := os.Create(csvName)
 	defer file.Close()
 	if err != nil{
-		checkError("Cannot create file", err)
-		return err
+		return errors.WrapDataUnreacheable(err, "error creating file %s", csvName)
 	}
 	
 	writer := csv.NewWriter(file)
@@ -36,14 +36,8 @@ func(r *repository) SavePokemons(data fetching.PokemonRequest, csvName string)(e
 		record = append(record, value.Url)
 		err := writer.Write(record)
 		if err != nil{
-			checkError("Cannot write to file", err)
-			return err
+			return errors.WrapDataUnreacheable(err, "error writing to file %s", csvName)
 		}
 	}
 	return nil
-}
-func checkError(message string, err error) {
-    if err != nil {
-        log.Fatal(message, err)
-    }
 }

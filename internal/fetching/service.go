@@ -1,11 +1,11 @@
 package fetching
 
 import(
-	"fmt"
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
 	//"github.com/pkg/errors"
+	"github.com/rsegura/codelycallexternal/internal/errors"
 )
 
 type PokemonRequest struct{
@@ -37,13 +37,12 @@ func (s *service) FetchPokemons(url string)(PokemonRequest, error){
 	var data PokemonRequest
 	var jsonErr error
 	if err != nil{
-		return PokemonRequest{}, err
+		return PokemonRequest{}, errors.WrapDataUnreacheable(err, "error getting response to %s", url)
 	}
 	
 	jsonErr = json.Unmarshal(binaryResponse, &data)
-	fmt.Println(data)
 	if jsonErr != nil {
-		return PokemonRequest{}, jsonErr
+		return PokemonRequest{}, errors.WrapDataUnreacheable(jsonErr, "error unmarhalling response from %s", url)
 	}
 	return data, nil
 }
