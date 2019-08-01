@@ -22,7 +22,7 @@ func NewRepository() CsvRepo{
 }
 
 func(r *repository) SavePokemons(data fetching.PokemonRequest, csvName string)(error){
-	file, err := os.Create(csvName)
+	file, err := os.Create(csvName+".csv")
 	defer file.Close()
 	if err != nil{
 		return errors.WrapDataUnreacheable(err, "error creating file %s", csvName)

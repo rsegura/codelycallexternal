@@ -11,6 +11,8 @@ import(
 func main(){
 
 	repo := csv.NewRepository()
+	//repo := inline.NewRepository()
+	//repo := json.NewRepository()
 	fetchingService := fetching.NewService()
 	rootCmd := &cobra.Command{Use: "Poke-cli"}
 	rootCmd.AddCommand(cli.InitPokeCmd(fetchingService, repo))
