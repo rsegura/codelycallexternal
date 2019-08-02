@@ -14,11 +14,11 @@ type CobraFn func(cmd *cobra.Command, args []string)
 
 const urlFlag = "url"
 const csvFlag = "csv"
-func InitPokeCmd(service pokemon.Service) *cobra.Command{
+func InitPokeCmd(handler pokemon.PokemonHandler) *cobra.Command{
 	pokeCmd := &cobra.Command{
 		Use: "PokeApi",
 		Short: "Print data about pokemons",
-		Run: runPokeFn(service),
+		Run: runPokeFn(handler),
 	}
 	pokeCmd.Flags().StringP(urlFlag, "u", "", "url")
 	pokeCmd.Flags().StringP(csvFlag, "c", "", "csv")
@@ -27,7 +27,7 @@ func InitPokeCmd(service pokemon.Service) *cobra.Command{
 }
 
 
-func runPokeFn(service pokemon.Service) CobraFn {
+func runPokeFn(handler pokemon.PokemonHandler) CobraFn {
 	return func(cmd *cobra.Command, args []string){
 		url,_ := cmd.Flags().GetString(urlFlag)
 		name,_ := cmd.Flags().GetString(csvFlag)
@@ -37,11 +37,7 @@ func runPokeFn(service pokemon.Service) CobraFn {
 		if name == ""{
 			name = "result"
 		}
-		pokemons, err := service.FetchPokemons(url, name)
-		if err != nil {
-			fmt.Println(err)
-		}
-
+		pokemons := handler.Get(url, name)
 		fmt.Println(pokemons.Results)
 		
 	}

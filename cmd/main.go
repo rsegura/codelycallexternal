@@ -14,8 +14,9 @@ func main(){
 	//var pokemonRepository = csv.NewCsvPokemonRepository()
 	var pokemonRepository = json.NewJsonPokemonRepository()
 	var pokemonService = pokemon.NewPokemonService(pokemonRepository)
+	var pokemonHandler = pokemon.NewPokemonHandler(pokemonService)
 
 	rootCmd := &cobra.Command{Use:"Poke-cli"}
-	rootCmd.AddCommand(cli.InitPokeCmd(pokemonService))
+	rootCmd.AddCommand(cli.InitPokeCmd(pokemonHandler))
 	rootCmd.Execute()
 }

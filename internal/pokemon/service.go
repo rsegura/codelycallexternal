@@ -8,21 +8,21 @@ import(
 	"github.com/rsegura/codelycallexternal/internal/errors"
 )
 
-type Service interface{
+type PokemonService interface{
 	FetchPokemons(url string, name string)(PokemonRequest, error)
 }
 
-type service struct{
+type pokemonservice struct{
 	repo PokemonRepository
 }
 
-func NewPokemonService(repo PokemonRepository) Service{
-	return &service{
+func NewPokemonService(repo PokemonRepository) PokemonService{
+	return &pokemonservice{
 		repo,
 	}
 }
 
-func (s *service) FetchPokemons(url string, name string)(PokemonRequest, error){
+func (s *pokemonservice) FetchPokemons(url string, name string)(PokemonRequest, error){
 	res, err := http.Get(url)
 	binaryResponse, err := ioutil.ReadAll(res.Body)
 	var data PokemonRequest
